@@ -18,7 +18,6 @@ const UserContacts = () => {
   useEffect(() => {
     if (token) {
       fetchContacts();
-      console.log(token);
     } else {
       console.log("No token available!!");
     }
@@ -34,6 +33,7 @@ const UserContacts = () => {
           },
         }
       );
+      console.log(res.data.contacts);
       setUserData(res.data.contacts);
       setUser(res.data.user.username);
     } catch (err) {
@@ -47,7 +47,7 @@ const UserContacts = () => {
   const contactSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(
+      await axios.post(
         "https://backend-lsp7.onrender.com/api/contacts",
         contact,
         {
@@ -63,6 +63,25 @@ const UserContacts = () => {
       alert("Contact not submitted");
     }
   };
+  const deleteContact = async (contactId) => {
+    try {
+      await axios.delete(
+        `https://backend-lsp7.onrender.com/api/contacts/:${contactId}`,
+        contact,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      alert("Contact deleted successfully!!");
+      fetchContacts();
+    } catch (Error) {
+      console.log(Error);
+      alert("Contact not Deleted");
+    }
+  };
+  const editContact = () => {};
 
   return (
     <div>
@@ -114,7 +133,14 @@ const UserContacts = () => {
                 <td>{user.name}</td>
                 <td>{user.email}</td>
                 <td>{user.phone}</td>
-                <td>Edit Delete</td>
+                <td>
+                  <button type="button" onClick={() => editContact(user._id)}>
+                    Edit
+                  </button>
+                  <button type="button" onClick={() => deleteContact(user._id)}>
+                    Delete
+                  </button>
+                </td>
               </tr>
             ))
           ) : (
