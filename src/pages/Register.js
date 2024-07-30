@@ -21,7 +21,7 @@ const Register = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:5002/api/users/register",
+        "https://backend-lsp7.onrender.com/api/users/register",
         data
       );
       console.log(response.data);

@@ -15,10 +15,13 @@ const Login = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5002/api/users/login", {
-        email,
-        password,
-      });
+      const res = await axios.post(
+        "https://backend-lsp7.onrender.com/api/users/login",
+        {
+          email,
+          password,
+        }
+      );
 
       setToken(res.data.accessToken);
       console.log(res.status);

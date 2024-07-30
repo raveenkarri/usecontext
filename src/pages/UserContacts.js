@@ -26,11 +26,14 @@ const UserContacts = () => {
   //for contacts of login user
   const fetchContacts = async () => {
     try {
-      const res = await axios.get("http://localhost:5002/api/contacts", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.get(
+        "https://backend-lsp7.onrender.com/api/contacts",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setUserData(res.data.contacts);
       setUser(res.data.user.username);
     } catch (err) {
@@ -45,7 +48,7 @@ const UserContacts = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:5002/api/contacts",
+        "https://backend-lsp7.onrender.com/api/contacts",
         contact,
         {
           headers: {
