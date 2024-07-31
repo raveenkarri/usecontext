@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaRegEyeSlash, FaRegEye } from "react-icons/fa";
 import axios from "axios";
-import { Store } from "../index"; // Adjust this import path as necessary
+import { Store } from "../../index"; // Adjust this import path as necessary
 import "./Login.css"; // Import the CSS file
 
 const Login = () => {

@@ -26,7 +26,7 @@ const Register = () => {
       );
       console.log(response.data);
       alert("Registered Successfully!!");
-      navigate("/login");
+      navigate("/");
     } catch (error) {
       console.error(error);
       // Handle error

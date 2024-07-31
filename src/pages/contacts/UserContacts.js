@@ -1,8 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./UserContacts.css";
-import axios from "axios";
-import { Store } from "../index";
+
+import { Store } from "../../index";
+import {
+  fetchContacts,
+  createContact,
+  editContact,
+  deleteContact,
+} from "../fucntions/CrudFunctions";
 
 const UserContacts = () => {
   const [contact, setContact] = useState({
@@ -13,65 +19,58 @@ const UserContacts = () => {
 
   const [user, setUser] = useState("");
   const [userData, setUserData] = useState([]);
-  const [token, setToken] = useContext(Store);
-  const [editContactId, setEditContactId] = useState(null); // Store editing state
+  const [token] = useContext(Store);
+  const [editContactId, setEditContactId] = useState(null);
 
   useEffect(() => {
     if (token) {
-      fetchContacts();
+      getContacts();
     } else {
       console.log("No token available!!");
     }
-  }, [token]);
-
-  // Get contacts of logged-in user
-  const fetchContacts = async () => {
-    try {
-      const res = await axios.get(
-        "https://backend-lsp7.onrender.com/api/contacts",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log(res.data.contacts);
-      setUserData(res.data.contacts);
-      setUser(res.data.user.username);
-    } catch (err) {
-      console.error("Error fetching contacts:", err);
-    }
-  };
+  }, []);
 
   const contactHandler = (e) => {
     setContact({ ...contact, [e.target.name]: e.target.value });
   };
 
+  // Get contacts of logged-in user
+  const getContacts = async () => {
+    try {
+      const res = await fetchContacts(token);
+      console.log(res.contacts);
+      setUserData(res.contacts);
+      setUser(res.user.username);
+    } catch (err) {
+      console.error("Error fetching contacts:", err);
+    }
+  };
+
   // Handle form submission
   const contactSubmit = async (e) => {
     e.preventDefault();
-    if (editContactId) {
-      await updateContact(editContactId);
-    } else {
-      await addContact();
+    try {
+      if (editContactId) {
+        await updateContact(editContactId);
+        alert("Contact updated successfully!!");
+      } else {
+        await addContact();
+        alert("Contact submitted successfully!!");
+      }
+      getContacts();
+      resetForm();
+    } catch (error) {
+      alert(`Contact not ${editContactId ? "updated" : "submitted"}`);
     }
   };
 
   // Add new contact
   const addContact = async () => {
     try {
-      await axios.post(
-        "https://backend-lsp7.onrender.com/api/contacts",
-        contact,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      alert("Contact submitted successfully!!");
-      fetchContacts();
-      setContact({ name: "", email: "", phone: "" });
+      await createContact(token, contact);
+
+      getContacts();
+      resetForm();
     } catch (Error) {
       console.log(Error);
       alert("Contact not submitted");
@@ -81,19 +80,10 @@ const UserContacts = () => {
   // Update existing contact
   const updateContact = async (contactId) => {
     try {
-      await axios.put(
-        `https://backend-lsp7.onrender.com/api/contacts/${contactId}`,
-        contact,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      alert("Contact updated successfully!!");
-      fetchContacts();
-      setEditContactId(null);
-      setContact({ name: "", email: "", phone: "" });
+      await editContact(token, contactId, contact);
+
+      getContacts();
+      resetForm();
     } catch (Error) {
       console.log(Error);
       alert("Contact not updated");
@@ -101,18 +91,11 @@ const UserContacts = () => {
   };
 
   // Delete contact
-  const deleteContact = async (contactId) => {
+  const handleDeleteContact = async (contactId) => {
     try {
-      await axios.delete(
-        `https://backend-lsp7.onrender.com/api/contacts/${contactId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await deleteContact(token, contactId);
       alert("Contact deleted successfully!!");
-      fetchContacts();
+      getContacts();
     } catch (Error) {
       console.log(Error);
       alert("Contact not deleted");
@@ -127,6 +110,11 @@ const UserContacts = () => {
       phone: contact.phone,
     });
     setEditContactId(contact._id);
+  };
+
+  const resetForm = () => {
+    setContact({ name: "", email: "", phone: "" });
+    setEditContactId(null);
   };
 
   return (
@@ -202,7 +190,7 @@ const UserContacts = () => {
                       marginRight: 20,
                     }}
                     type="button"
-                    onClick={() => deleteContact(contact._id)}
+                    onClick={() => handleDeleteContact(contact._id)}
                   >
                     Delete
                   </button>
