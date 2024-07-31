@@ -20,3 +20,30 @@
   background-color: #04AA6D;
   color: white;
 }
+.contact-form{
+ margin-left: 40%;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 400px; 
+}
+.contact-form input{
+width: 90%;
+  padding: 10px;
+  margin: 10px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.submit-container{
+  font-size: 20px;
+  color:white;
+  justify-content: center;
+  padding: 10px;
+  margin: 10px;
+  width: 95%;
+    border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #575dfe;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+}

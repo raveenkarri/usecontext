@@ -14,6 +14,7 @@ const UserContacts = () => {
   const [user, setUser] = useState("");
   const [userData, setUserData] = useState([]);
   const [token, setToken] = useContext(Store);
+  const [editContactId, setEditContactId] = useState(null); // Store editing state
 
   useEffect(() => {
     if (token) {
@@ -22,7 +23,8 @@ const UserContacts = () => {
       console.log("No token available!!");
     }
   }, [token]);
-  //for contacts of login user
+
+  // Get contacts of logged-in user
   const fetchContacts = async () => {
     try {
       const res = await axios.get(
@@ -40,12 +42,23 @@ const UserContacts = () => {
       console.error("Error fetching contacts:", err);
     }
   };
-  //for adding new contact to login user
+
   const contactHandler = (e) => {
     setContact({ ...contact, [e.target.name]: e.target.value });
   };
+
+  // Handle form submission
   const contactSubmit = async (e) => {
     e.preventDefault();
+    if (editContactId) {
+      await updateContact(editContactId);
+    } else {
+      await addContact();
+    }
+  };
+
+  // Add new contact
+  const addContact = async () => {
     try {
       await axios.post(
         "https://backend-lsp7.onrender.com/api/contacts",
@@ -58,16 +71,40 @@ const UserContacts = () => {
       );
       alert("Contact submitted successfully!!");
       fetchContacts();
+      setContact({ name: "", email: "", phone: "" });
     } catch (Error) {
       console.log(Error);
       alert("Contact not submitted");
     }
   };
+
+  // Update existing contact
+  const updateContact = async (contactId) => {
+    try {
+      await axios.put(
+        `https://backend-lsp7.onrender.com/api/contacts/${contactId}`,
+        contact,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      alert("Contact updated successfully!!");
+      fetchContacts();
+      setEditContactId(null);
+      setContact({ name: "", email: "", phone: "" });
+    } catch (Error) {
+      console.log(Error);
+      alert("Contact not updated");
+    }
+  };
+
+  // Delete contact
   const deleteContact = async (contactId) => {
     try {
       await axios.delete(
-        `https://backend-lsp7.onrender.com/api/contacts/:${contactId}`,
-        contact,
+        `https://backend-lsp7.onrender.com/api/contacts/${contactId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -78,15 +115,26 @@ const UserContacts = () => {
       fetchContacts();
     } catch (Error) {
       console.log(Error);
-      alert("Contact not Deleted");
+      alert("Contact not deleted");
     }
   };
-  const editContact = () => {};
+
+  // Handle edit button click
+  const handleEditClick = (contact) => {
+    setContact({
+      name: contact.name,
+      email: contact.email,
+      phone: contact.phone,
+    });
+    setEditContactId(contact._id);
+  };
 
   return (
     <div>
-      <h1>Hi {user}!</h1>
-      <div>
+      <center>
+        <h1>Hi {user}!</h1>
+      </center>
+      <div className="contact-form">
         <form onSubmit={contactSubmit}>
           <input
             type="text"
@@ -112,7 +160,9 @@ const UserContacts = () => {
             onChange={contactHandler}
           />
           <br />
-          <button type="submit">Submit</button>
+          <button className="submit-container" type="submit">
+            {editContactId ? "Update" : "Submit"}
+          </button>
         </form>
       </div>
       <hr />
@@ -128,16 +178,32 @@ const UserContacts = () => {
         </thead>
         <tbody>
           {userData.length > 0 ? (
-            userData.map((user, index) => (
+            userData.map((contact, index) => (
               <tr key={index}>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>{user.phone}</td>
+                <td>{contact.name}</td>
+                <td>{contact.email}</td>
+                <td>{contact.phone}</td>
                 <td>
-                  <button type="button" onClick={() => editContact(user._id)}>
+                  <button
+                    style={{
+                      backgroundColor: "blue",
+                      color: "white",
+                      marginRight: 20,
+                    }}
+                    type="button"
+                    onClick={() => handleEditClick(contact)}
+                  >
                     Edit
                   </button>
-                  <button type="button" onClick={() => deleteContact(user._id)}>
+                  <button
+                    style={{
+                      backgroundColor: "red",
+                      color: "black",
+                      marginRight: 20,
+                    }}
+                    type="button"
+                    onClick={() => deleteContact(contact._id)}
+                  >
                     Delete
                   </button>
                 </td>
@@ -145,7 +211,7 @@ const UserContacts = () => {
             ))
           ) : (
             <tr>
-              <td colSpan="3">No contacts found</td>
+              <td colSpan="4">No contacts found</td>
             </tr>
           )}
         </tbody>
