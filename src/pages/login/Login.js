@@ -11,9 +11,11 @@ const Login = () => {
   const [hide, setHide] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false); // Loading state
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    setLoading(true); // Set loading to true when submitting
     try {
       const res = await axios.post(
         "https://backend-lsp7.onrender.com/api/users/login",
@@ -33,44 +35,50 @@ const Login = () => {
       } else {
         console.log("An unexpected error occurred");
       }
+    } finally {
+      setLoading(false); // Set loading to false after response is received
     }
   };
 
   return (
     <div className="login-container">
       <h1>Login</h1>
-      <form onSubmit={submitHandler} className="login-form">
-        <input
-          className="login-form-input"
-          type="email"
-          placeholder="Enter email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <br />
-        <div className="password-container">
+      {loading ? (
+        <div className="loading">Loading...</div>
+      ) : (
+        <form onSubmit={submitHandler} className="login-form">
           <input
             className="login-form-input"
-            type={hide ? "text" : "password"}
-            value={password}
-            placeholder="Enter password"
-            onChange={(e) => setPassword(e.target.value)}
+            type="email"
+            placeholder="Enter email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
-          <button
-            className="hideButton"
-            type="button"
-            onClick={() => setHide(!hide)}
-          >
-            {hide ? <FaRegEyeSlash /> : <FaRegEye />}
+          <br />
+          <div className="password-container">
+            <input
+              className="login-form-input"
+              type={hide ? "text" : "password"}
+              value={password}
+              placeholder="Enter password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <button
+              className="hideButton"
+              type="button"
+              onClick={() => setHide(!hide)}
+            >
+              {hide ? <FaRegEyeSlash /> : <FaRegEye />}
+            </button>
+          </div>
+          <br />
+          <button type="submit" className="submit-button">
+            Submit
           </button>
-        </div>
-        <br />
-        <button type="submit" className="submit-button">
-          Submit
-        </button>
-        <br />
-        <Link to="/register">Don't have an account? Register</Link>
-      </form>
+          <br />
+          <Link to="/register">Don't have an account? Register</Link>
+        </form>
+      )}
     </div>
   );
 };
