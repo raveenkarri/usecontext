@@ -41,45 +41,50 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
-      <h1>Login</h1>
-      {loading ? (
-        <div className="loading">Loading...</div>
-      ) : (
-        <form onSubmit={submitHandler} className="login-form">
-          <input
-            className="login-form-input"
-            type="email"
-            placeholder="Enter email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <br />
-          <div className="password-container">
-            <input
-              className="login-form-input"
-              type={hide ? "text" : "password"}
-              value={password}
-              placeholder="Enter password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <button
-              className="hideButton"
-              type="button"
-              onClick={() => setHide(!hide)}
-            >
-              {hide ? <FaRegEyeSlash /> : <FaRegEye />}
-            </button>
+    <>
+      <div className="login-container">
+        {loading ? (
+          <div className="loading">Loading...</div>
+        ) : (
+          <div>
+            <h1>Login:</h1>
+
+            <form onSubmit={submitHandler} className="login-form">
+              <input
+                className="login-form-input"
+                type="email"
+                placeholder="Enter email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <br />
+              <div className="password-container">
+                <input
+                  className="login-form-input"
+                  type={hide ? "text" : "password"}
+                  value={password}
+                  placeholder="Enter password"
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <button
+                  className="hideButton"
+                  type="button"
+                  onClick={() => setHide(!hide)}
+                >
+                  {hide ? <FaRegEyeSlash /> : <FaRegEye />}
+                </button>
+              </div>
+              <br />
+              <button type="submit" className="submit-button">
+                Submit
+              </button>
+              <br />
+              <Link to="/register">Don't have an account? Register</Link>
+            </form>
           </div>
-          <br />
-          <button type="submit" className="submit-button">
-            Submit
-          </button>
-          <br />
-          <Link to="/register">Don't have an account? Register</Link>
-        </form>
-      )}
-    </div>
+        )}
+      </div>
+    </>
   );
 };
 
