@@ -21,31 +21,23 @@
 }
 
 .register-form input {
-  width: 100%;
+  width: 94%;
   padding: 10px;
   margin: 10px 0;
   border: 1px solid #ccc;
   border-radius: 5px;
 }
-/* 
-.register-form button[type="button"] {
-  background: none;
-  border: none;
-  cursor: pointer;
-  position: absolute;
-  margin-left: -30px;
-  margin-top: 18px;
-} */
 
 .register-form button[type="submit"] {
   width: 100%;
   padding: 10px;
   margin: 10px 0;
+  margin-bottom: 10px;
   background-color: #007bff;
   border: none;
   border-radius: 5px;
   color: white;
-  font-size: 16px;
+  font-size: 24px;
   cursor: pointer;
 }
 
@@ -53,19 +45,33 @@
   background-color: #0056b3;
 }
 
-.register-form a {
-  text-align: center;
-  margin-top: 10px;
-  color: #007bff;
-  text-decoration: none;
-}
 
 .register-form a:hover {
   text-decoration: underline;
 }
-.password-container{
-  display: flex;
+/* Routes.css */
+.routes-container {
+
+  text-align: center;
+  margin-top: 0px;
+ 
 }
-.hideButton{
-  border: none;
+
+.route-link {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 10px 0;
+  color: rgb(17, 1, 1);
+  background-color: #007bff;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.route-link:hover {
+  background-color: #0056b3;
+}
+
+.route-link:active {
+  background-color: #004085;
 }

@@ -50,6 +50,7 @@ const Login = () => {
         <br />
         <div className="password-container">
           <input
+            className="login-form-input"
             type={hide ? "text" : "password"}
             value={password}
             placeholder="Enter password"

@@ -24,7 +24,7 @@ const Register = () => {
         "https://backend-lsp7.onrender.com/api/users/register",
         data
       );
-      console.log(response.data);
+
       alert("Registered Successfully!!");
       navigate("/");
     } catch (error) {
@@ -81,11 +81,21 @@ const Register = () => {
         <br />
         <button type="submit">Submit</button>
         <br />
-        <h1>
-          <Link to="/usercontacts">User contacts -</Link>
-          <br />
-          <Link to="/">Login-</Link>
-        </h1>
+        <div className="routes-container">
+          <h1>
+            <Link
+              style={{ color: "white" }}
+              to="/usercontacts"
+              className="route-link"
+            >
+              User contacts
+            </Link>
+            <br />
+            <Link style={{ color: "white" }} to="/" className="route-link">
+              Login
+            </Link>
+          </h1>
+        </div>
       </form>
     </div>
   );

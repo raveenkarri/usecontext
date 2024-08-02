@@ -20,22 +20,15 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.login-form input {
+/* .login-form-input {
   width: 95%;
   padding: 10px;
   margin: 10px 0;
   border: 1px solid #ccc;
   border-radius: 5px;
-}
-
-/* .login-form button[type="button"] {
-  background: none;
-  border: none;
-  cursor: pointer;
-  position: absolute;
-  margin-left: -30px;
-  margin-top: 18px;
 } */
+
+
 
 .submit-button {
   width: 100%;
@@ -63,9 +56,26 @@
 .login-form a:hover {
   text-decoration: underline;
 }
-.password-container{
+.password-container {
+  position: relative;
   display: flex;
+  align-items: center;
 }
-.hideButton{
+
+.login-form-input {
+  width: 94%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.hideButton {
+  position: absolute;
+  right: 5px; /* Adjust the positioning */
+  background: none;
   border: none;
+  cursor: pointer;
+  outline: none;
+  font-size: 18px;
 }

@@ -38,7 +38,7 @@ const UserContacts = () => {
   const getContacts = async () => {
     try {
       const res = await fetchContacts(token);
-      console.log(res.contacts);
+
       setUserData(res.contacts);
       setUser(res.user.username);
     } catch (err) {
@@ -52,10 +52,8 @@ const UserContacts = () => {
     try {
       if (editContactId) {
         await updateContact(editContactId);
-        alert("Contact updated successfully!!");
       } else {
         await addContact();
-        alert("Contact submitted successfully!!");
       }
       getContacts();
       resetForm();
@@ -68,11 +66,12 @@ const UserContacts = () => {
   const addContact = async () => {
     try {
       await createContact(token, contact);
-
+      alert("Contact submitted successfully!!");
       getContacts();
       resetForm();
     } catch (Error) {
       console.log(Error);
+      setEditContactId(null);
       alert("Contact not submitted");
     }
   };
@@ -81,11 +80,12 @@ const UserContacts = () => {
   const updateContact = async (contactId) => {
     try {
       await editContact(token, contactId, contact);
-
+      alert("Contact updated successfully!!");
       getContacts();
       resetForm();
     } catch (Error) {
       console.log(Error);
+      setEditContactId(null);
       alert("Contact not updated");
     }
   };
@@ -119,39 +119,49 @@ const UserContacts = () => {
 
   return (
     <div>
-      <center>
-        <h1>Hi {user}!</h1>
-      </center>
-      <div className="contact-form">
-        <form onSubmit={contactSubmit}>
-          <input
-            type="text"
-            name="name"
-            value={contact.name}
-            placeholder="Contact name"
-            onChange={contactHandler}
-          />
-          <br />
-          <input
-            type="text"
-            name="email"
-            value={contact.email}
-            placeholder="Contact email"
-            onChange={contactHandler}
-          />
-          <br />
-          <input
-            type="text"
-            name="phone"
-            value={contact.phone}
-            placeholder="Contact Number"
-            onChange={contactHandler}
-          />
-          <br />
-          <button className="submit-container" type="submit">
-            {editContactId ? "Update" : "Submit"}
-          </button>
-        </form>
+      <hr />
+      <div className="heading-contactForm">
+        <div className="heading">
+          <h1>
+            Hi
+            <br />
+            <span style={{ color: "rgb(162, 0, 247)" }}>{user},</span>
+            <br />
+            Add Your contacts,
+          </h1>
+        </div>
+
+        <div className="contact-form">
+          <form onSubmit={contactSubmit}>
+            <input
+              type="text"
+              name="name"
+              value={contact.name}
+              placeholder="Contact name"
+              onChange={contactHandler}
+            />
+            <br />
+            <input
+              type="text"
+              name="email"
+              value={contact.email}
+              placeholder="Contact email"
+              onChange={contactHandler}
+            />
+            <br />
+            <input
+              type="text"
+              name="phone"
+              value={contact.phone}
+              placeholder="Contact Number"
+              onChange={contactHandler}
+            />
+            <br />
+            <button className="submit-container" type="submit">
+              {editContactId ? "Update" : "Submit"}
+            </button>
+          </form>
+        </div>
       </div>
       <hr />
       <h1>Your Contacts:</h1>
@@ -172,41 +182,45 @@ const UserContacts = () => {
                 <td>{contact.email}</td>
                 <td>{contact.phone}</td>
                 <td>
-                  <button
-                    style={{
-                      backgroundColor: "blue",
-                      color: "white",
-                      marginRight: 20,
-                    }}
-                    type="button"
-                    onClick={() => handleEditClick(contact)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    style={{
-                      backgroundColor: "red",
-                      color: "black",
-                      marginRight: 20,
-                    }}
-                    type="button"
-                    onClick={() => handleDeleteContact(contact._id)}
-                  >
-                    Delete
-                  </button>
+                  <div className="button-container">
+                    <button
+                      className="edit-button"
+                      type="button"
+                      onClick={() => handleEditClick(contact)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="delete-button"
+                      type="button"
+                      onClick={() => handleDeleteContact(contact._id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="4">No contacts found</td>
+              <td colSpan="4">
+                No contacts found!!!-----
+                <span style={{ color: "blue" }}>
+                  Please add contacts in the above Form^
+                </span>
+              </td>
             </tr>
           )}
         </tbody>
       </table>
-      <h1>
-        <Link to="/">{userData.length > 0 ? "Logout" : "Login"}</Link>
-      </h1>
+
+      <div>
+        <h1>
+          <Link to="/" className="logout-container">
+            Logout
+          </Link>
+        </h1>
+      </div>
     </div>
   );
 };
