@@ -19,7 +19,7 @@ const UserContacts = () => {
 
   const [user, setUser] = useState("");
   const [userData, setUserData] = useState([]);
-  const [token] = useContext(Store);
+  const [token, setToken] = useContext(Store);
   const [editContactId, setEditContactId] = useState(null);
 
   useEffect(() => {
@@ -115,6 +115,9 @@ const UserContacts = () => {
   const resetForm = () => {
     setContact({ name: "", email: "", phone: "" });
     setEditContactId(null);
+  };
+  const logoutHandler = () => {
+    setToken("");
   };
 
   return (
@@ -216,7 +219,7 @@ const UserContacts = () => {
 
       <div>
         <h1>
-          <Link to="/" className="logout-container">
+          <Link to="/" className="logout-container" onClick={logoutHandler}>
             Logout
           </Link>
         </h1>
